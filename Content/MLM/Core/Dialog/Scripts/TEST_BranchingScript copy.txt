@@ -5,6 +5,7 @@
 
 #label BillTalk
   Bill: I actually don't really have anything to say.
+  #set !billtalk
   Alice: I knew it.  See?  I warned you this would happen.
   #choose You literally did no such thing
     #goto BackNForth
@@ -21,10 +22,15 @@
 
 #label Begin
   Alice: I'm talking first! But who should talk second?
+  #set dialogstart
   #choose This is kind of long but...
     #goto BillTalk
     #full This is kind of long but what I wanted to say is that I'd like to hear Bill speak.
     Bill: Oh hell yeah.
     Alice: Ugh, laaaame!
+    #set billtalk
+    #set !alicetalk
   #choose Just let Alice talk again.
     #goto AliceTalk
+    #set !billtalk
+    #set alicetalk

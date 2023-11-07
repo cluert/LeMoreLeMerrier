@@ -9,7 +9,17 @@ AMLMPresenter::AMLMPresenter()
 	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
+	CurrentNode = -1;
+	CurrentEdge = -1;
+	CurrentLine = -1;
+	bAtChoice = false;
+	bLastAtChoice = false;
+	bNeedShowChoice = false;
+	bDone = false;
+	bLastDone = false;
+
 	StartLabel = TEXT("Begin");
+	DoneLabel = TEXT("Done");
 }
 
 // Called when the game starts or when spawned
@@ -57,13 +67,33 @@ bool AMLMPresenter::LoadScript(const FString& FileName)
 
 void AMLMPresenter::Next()
 {
-	LoadCurrentDialogLine();
+	if (!IsTreeValid())
+	{
+		return;
+	}
+	
+	if (bNeedShowChoice)
+	{
+		CurrentDialogLine.Speaker = TEXT("YOU");
+		CurrentDialogLine.Line = GetFullChoiceText(CurrentEdge);
+		bNeedShowChoice = false;
+	}
+	else
+	{
+		LoadCurrentDialogLine();
+	}
 
 	ProgressReader();
 }
 
 TArray<FString> AMLMPresenter::ListChoices()
 {
+	if (!IsTreeValid())
+	{
+		TArray<FString> Empty;
+		return Empty;
+	}
+	
 	TArray<FString> Choices;
 	int32 len = DialogTree.Nodes[CurrentNode].Edges.Num();
 	for (int32 i = 0; i < len; ++i)
@@ -75,6 +105,11 @@ TArray<FString> AMLMPresenter::ListChoices()
 
 void AMLMPresenter::Choose(int32 ChosenIndex)
 {
+	if (!IsTreeValid())
+	{
+		return;
+	}
+	
 	if (ChosenIndex < 0 || ChosenIndex >= DialogTree.Nodes[CurrentNode].Edges.Num())
 	{
 		UE_LOG(LogTemp, Warning, TEXT("Choice was out of range (should be 0 to %i"), DialogTree.Nodes[CurrentNode].Edges.Num()-1)
@@ -84,13 +119,18 @@ void AMLMPresenter::Choose(int32 ChosenIndex)
 	CurrentEdge = ChosenIndex;
 	CurrentLine = -1;
 	bAtChoice = false;
-	ProgressReader();
+	bNeedShowChoice = true;
 
-	UE_LOG(LogTemp, Warning, TEXT("After Choose, our indices are:  node=%i,   edge=%i,   line=%i"), CurrentNode, CurrentEdge, CurrentLine)
+	// UE_LOG(LogTemp, Warning, TEXT("After Choose, our indices are:  node=%i,   edge=%i,   line=%i"), CurrentNode, CurrentEdge, CurrentLine)
 }
 
 FString AMLMPresenter::GetFullChoiceText(int32 ChoiceIndex)
 {
+	if (!IsTreeValid())
+	{
+		return TEXT("");
+	}
+	
 	if (ChoiceIndex >= DialogTree.Nodes[CurrentNode].Edges.Num())
 	{
 		UE_LOG(LogTemp, Warning, TEXT("Choice Index was out of range: asked for %i, current options %i"), ChoiceIndex, DialogTree.Nodes[CurrentNode].Edges.Num())
@@ -137,12 +177,24 @@ void AMLMPresenter::ProgressReader()
 		return;
 	}
 
+	// We are out of lines to display for the current Node/Edge -- try to move through graph
+
+	// (but first, save variables)
+	if (InEdge())
+	{
+		SetValuesFromEdge(DialogTree.Nodes[CurrentNode].Edges[CurrentEdge]);
+	}
+	else
+	{
+		SetValuesFromNode(DialogTree.Nodes[CurrentNode]);
+	}
+	
 	if (InEdge())
 	{
 		// Get the node the current edge connects to.  If there is none, we are done reading
 		
 		FString NextNodeId = DialogTree.Nodes[CurrentNode].Edges[CurrentEdge].NextNodeId;
-		if (!NextNodeId.IsEmpty())
+		if (!NextNodeId.IsEmpty() && 0 != NextNodeId.Compare(DoneLabel, ESearchCase::IgnoreCase))
 		{
 			CurrentNode = GetNodeIndex(NextNodeId);
 			if (CurrentNode > -1)

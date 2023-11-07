@@ -55,8 +55,83 @@ public:
 	UFUNCTION(BlueprintCallable)
 	bool ValidateTree();
 
+	UFUNCTION(BlueprintPure)
+	bool IsTreeValid()
+	{
+		return DialogTree.Message.IsEmpty();
+	}
+
+	UPROPERTY(BlueprintReadOnly)
+	TMap<FString, bool> SavedVariables;
+
+	UFUNCTION(BlueprintCallable)
+	bool GetVariable(const FString& VarName)
+	{
+		if (SavedVariables.Contains(VarName))
+		{
+			return SavedVariables[VarName];
+		}
+		return false;
+	}
+
+	UFUNCTION(BlueprintCallable)
+	void LoadVariables(const TMap<FString,bool> NewValues)
+	{
+		SavedVariables = NewValues;
+	}
+
+	UFUNCTION(BlueprintCallable)
+	void ClearVariables()
+	{
+		SavedVariables.Empty();
+	}
+
+	void SetValuesFromNode(FDialogNode Node)
+	{
+		SetValues(Node.Variables);
+	}
+
+	void SetValuesFromEdge(FDialogEdge Edge)
+	{
+		SetValues(Edge.Variables);
+	}
+
+	void SetValues(const TArray<FString>& Variables)
+	{
+		for (int32 i = 0; i < Variables.Num(); ++i)
+		{
+			FString VarName = Variables[i];
+			if (!VarName.IsEmpty())
+			{
+				if (VarName.StartsWith("!"))
+				{
+					SavedVariables.Add(VarName.Mid(1), false);
+				} else
+				{
+					SavedVariables.Add(VarName, true);
+				}
+			}
+		}
+	}
+	
 	UPROPERTY(BlueprintReadWrite)
 	FString StartLabel;
+
+	UPROPERTY(BlueprintReadWrite)
+	FString DoneLabel;
+
+	UFUNCTION(BlueprintCallable)
+	FString GetErrorMessage()
+	{
+		if (DialogTree.Message.IsEmpty())
+		{
+			return TEXT("No error.");
+		}
+		else
+		{
+			return DialogTree.Message;
+		}
+	}
 	
 private:
 	FDialogTree DialogTree;
@@ -67,6 +142,7 @@ private:
 	int32 CurrentNode;
 	int32 CurrentEdge;
 	int32 CurrentLine;
+	bool bNeedShowChoice;
 	bool bAtChoice;
 	bool bDone;
 	bool bLastAtChoice;
@@ -83,6 +159,7 @@ private:
 			CurrentDialogLine = DialogTree.Nodes[CurrentNode].Lines[CurrentLine];
 		}
 	}
+	
 	void ProgressReader();
 
 	bool InEdge() { return CurrentEdge > -1; }

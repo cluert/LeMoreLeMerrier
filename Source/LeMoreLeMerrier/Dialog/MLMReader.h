@@ -55,6 +55,8 @@ struct FDialogEdge
 	UPROPERTY(BlueprintReadOnly)
 	TArray<FDialogLine> Lines;
 
+	UPROPERTY(BlueprintReadOnly)
+	TArray<FString> Variables;
 };
 
 USTRUCT(BlueprintType)
@@ -68,6 +70,9 @@ struct FDialogNode
 	TArray<FDialogEdge> Edges;
 	UPROPERTY(BlueprintReadOnly)
 	TArray<FDialogLine> Lines;
+
+	UPROPERTY(BlueprintReadOnly)
+	TArray<FString> Variables;
 };
 
 USTRUCT(BlueprintType)

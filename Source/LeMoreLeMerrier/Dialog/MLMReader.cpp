@@ -27,9 +27,7 @@ FDialogTree UMLMReader::GenerateDialogTree(const FString& FileName)
 		FailedTree.Message = TEXT("File found but failed to load to string");
 		return FailedTree;
 	}
-
-	UE_LOG(LogTemp, Warning, TEXT("Text from file: %s"), *FileContent);
-
+	
 	TArray<FString> Lines;
 	FileContent.ParseIntoArrayLines(Lines, true);
 
@@ -70,7 +68,7 @@ FDialogTree UMLMReader::GenerateDialogTree(const FString& FileName)
 			FDialogNode NewNode;
 			NewNode.Id = GetTextAfterCommand(Row, Type);
 			Tree.Nodes.Add(NewNode);
-			UE_LOG(LogTemp, Warning, TEXT("newnode='%s'"), *NewNode.Id)
+			// UE_LOG(LogTemp, Warning, TEXT("Node='%s'"), *NewNode.Id)
 		}
 		else if (Type == ERowType::DIALOG || Type == ERowType::SAY)
 		{
@@ -94,7 +92,7 @@ FDialogTree UMLMReader::GenerateDialogTree(const FString& FileName)
 				Tree.Nodes[NodeIndex].Lines.Add(Line);
 			}
 
-			UE_LOG(LogTemp, Warning, TEXT("speaker=%s,verse=%s"), *Line.Speaker, *Line.Line);
+			// UE_LOG(LogTemp, Warning, TEXT("speaker=%s,verse=%s"), *Line.Speaker, *Line.Line);
 		}
 		else if (Type == GOTO)
 		{
@@ -112,6 +110,8 @@ FDialogTree UMLMReader::GenerateDialogTree(const FString& FileName)
 				
 				Tree.Nodes[NodeIndex].Edges[EdgeIndex].NextNodeId = GetTextAfterCommand(Row, Type);
 				ChoiceNeedsMatch = false;
+
+				// UE_LOG(LogTemp, Warning, TEXT("Choice-Goto = %s"), *GetTextAfterCommand(Row, Type))
 			}
 			else
 			{
@@ -126,6 +126,8 @@ FDialogTree UMLMReader::GenerateDialogTree(const FString& FileName)
 					ChoiceNeedsMatch = true;
 					LastMatchWasChoice = false;
 				}
+
+				// UE_LOG(LogTemp, Warning, TEXT("Goto = %s"), *GetTextAfterCommand(Row, Type))
 			}
 		}
 		else if (Type == CHOOSE) // i think this logic can be combined with goto
@@ -145,6 +147,8 @@ FDialogTree UMLMReader::GenerateDialogTree(const FString& FileName)
 
 				Tree.Nodes[NodeIndex].Edges[EdgeIndex].ChoiceText = GetTextAfterCommand(Row, Type);
 				ChoiceNeedsMatch = true;
+				
+				// UE_LOG(LogTemp, Warning, TEXT("Choice = %s"), *GetTextAfterCommand(Row, Type))
 			}
 			else
 			{
@@ -159,6 +163,8 @@ FDialogTree UMLMReader::GenerateDialogTree(const FString& FileName)
 					ChoiceNeedsMatch = true;
 					LastMatchWasChoice = true;
 				}
+
+				// UE_LOG(LogTemp, Warning, TEXT("Choice = %s"), *GetTextAfterCommand(Row, Type))
 			}
 		}
 		else if (Type == FULL)
@@ -172,6 +178,21 @@ FDialogTree UMLMReader::GenerateDialogTree(const FString& FileName)
 			}
 
 			Tree.Nodes[NodeIndex].Edges[EdgeIndex].ChoiceTextExtended = GetTextAfterCommand(Row, Type);
+
+			// UE_LOG(LogTemp, Warning, TEXT("Full = %s"), *GetTextAfterCommand(Row, Type))
+		}
+		else if (Type == SET)
+		{
+			if (InEdge)
+			{
+				Tree.Nodes[NodeIndex].Edges[EdgeIndex].Variables.Add(GetTextAfterCommand(Row, Type));
+			}
+			else
+			{
+				Tree.Nodes[NodeIndex].Variables.Add(GetTextAfterCommand(Row, Type));
+			}
+
+			// UE_LOG(LogTemp, Warning, TEXT("Set (%s) = %s"), InEdge ? TEXT("Edge") : TEXT("Node"), *GetTextAfterCommand(Row, Type))
 		}
 	}
 
