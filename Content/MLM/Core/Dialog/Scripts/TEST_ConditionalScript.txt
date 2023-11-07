@@ -1,0 +1,15 @@
+#label End
+Bill: I'll say something fourth.
+
+
+#label Begin
+
+Alice: I'm talking first!
+Bill: And I'm talking second.
+Alice: Now I'm talking third!
+
+#condition stuck_in_loop
+#true Begin
+#false End
+
+

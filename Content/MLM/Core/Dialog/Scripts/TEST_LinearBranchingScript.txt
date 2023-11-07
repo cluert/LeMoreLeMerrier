@@ -1,0 +1,20 @@
+#label Third
+  Alice: Now I'm talking third!
+  #goto Fourth
+
+
+#label Fourth
+  Bill: I'll say something fourth.
+
+
+#label Second
+  Bill: And I'm talking second.
+  #goto Third
+
+
+#label Begin
+  Alice: I'm talking first!
+  #say Ok.
+  #goto Second
+    Alice: But first let me say this before Bill says anything:  ... eh, I got nothin
+    #say Ok.

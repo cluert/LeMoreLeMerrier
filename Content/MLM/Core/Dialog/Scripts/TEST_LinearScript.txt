@@ -1,0 +1,7 @@
+#label Begin
+
+Alice: I'm talking first!
+Bill: And I'm talking second.
+Alice: Now I'm talking third!
+#say *Bill looks like he has something very important to say*
+Bill: I'll say something fourth.
