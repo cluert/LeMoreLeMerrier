@@ -26,6 +26,9 @@ public:
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType,
 	                           FActorComponentTickFunction* ThisTickFunction) override;
 
+	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
+	void OnFinishedReading();
+	
 	UFUNCTION(BlueprintCallable)
 	FDialogLine GetCurrentLine()
 	{
