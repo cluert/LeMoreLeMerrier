@@ -17,6 +17,37 @@
 // cause a stutter
 
 
+UENUM(BlueprintType)
+enum EDialogEventType
+{
+	Line = 0 UMETA(DisplayName="Line"),
+	Emotion UMETA(DisplayName="Emotion"),
+	PlaybackSpeed UMETA(DisplayName="PlaybackSpeed"),
+	Pause UMETA(DisplayName="Pause"),
+};
+
+UENUM(BlueprintType)
+enum EDialogEmotion
+{
+	None = 0 UMETA(DisplayName="None"),
+	Glad UMETA(DisplayName="Glad"),
+	Mad UMETA(DisplayName="Mad"),
+	Sad UMETA(DisplayName="Sad"),
+	Max UMETA(Hidden)
+};
+
+
+USTRUCT(BlueprintType)
+struct FDialogEvent
+{
+	GENERATED_BODY()
+
+	UPROPERTY(BlueprintReadOnly)
+	TEnumAsByte<EDialogEventType> EventType;
+	UPROPERTY(BlueprintReadOnly)
+	FString Argument;
+};
+
 USTRUCT(BlueprintType)
 struct FDialogLine
 {
@@ -110,17 +141,20 @@ class LEMORELEMERRIER_API UMLMReader : public UBlueprintFunctionLibrary
 	GENERATED_BODY()
 
 public:
-	UFUNCTION(BlueprintCallable, Category=Dialog)
+	UFUNCTION(BlueprintCallable, Category=Parser)
 	static FDialogTree GenerateDialogTree(const FString& FileName);
 
-	UFUNCTION(BlueprintCallable, Category=Dialog)
+	UFUNCTION(BlueprintCallable, Category=Parser)
 	static FDialogTree DEBUG_TestLinearDialog(const FString& FileName);
 
-	UFUNCTION(BlueprintCallable, Category=Dialog)
+	UFUNCTION(BlueprintCallable, Category=Parser)
 	static bool IsTreeValid(const FDialogTree& Tree)
 	{
 		return Tree.Message.IsEmpty();
 	}
+
+	UFUNCTION(BlueprintCallable, Category=Reader)
+	static TArray<FDialogEvent> ParseEventsFromLine(FString Line);
 	
 private:
 	static bool IsWhiteSpace(const char& C)
@@ -238,4 +272,6 @@ private:
 		MissingNode.Id = TEXT("NodeMissing");
 		return MissingNode;
 	}
+
+	static bool ParseEventText(const FString& BracketedValue, FString& Value, EDialogEventType& EventType);
 };
