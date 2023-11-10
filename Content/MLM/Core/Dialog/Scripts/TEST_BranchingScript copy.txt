@@ -21,13 +21,13 @@
 
 
 #label Begin
-  Alice: I'm talking first! But who should talk second?
+  Alice: I'm talking first![pause .5 ]But who should talk second?
   #set dialogstart
   #choose This is kind of long but...
     #goto BillTalk
     #full This is kind of long but what I wanted to say is that I'd like to hear Bill speak.
-    Bill: Oh hell yeah.
-    Alice: Ugh, laaaame!
+    Bill: [glad] Oh hell yeah.
+    Alice: [mad] [pause 2] [speed 5] Ugh, [speed 2] laaaame!
     #set billtalk
     #set !alicetalk
   #choose Just let Alice talk again.

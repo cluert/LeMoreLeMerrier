@@ -8,7 +8,8 @@
 UDialogComponent::UDialogComponent()
 {
 	PrimaryComponentTick.bCanEverTick = false;
-
+	PrintChoiceAsLine = true;
+	
 	CurrentNode = -1;
 	CurrentEdge = -1;
 	CurrentLine = -1;
@@ -80,8 +81,16 @@ void UDialogComponent::Next()
 	
 	if (bNeedShowChoice)
 	{
-		CurrentDialogLine.Speaker = TEXT("YOU");
-		CurrentDialogLine.Line = GetFullChoiceText(CurrentEdge);
+		if (PrintChoiceAsLine)
+		{
+			CurrentDialogLine.Speaker = TEXT("YOU");
+			CurrentDialogLine.Line = GetFullChoiceText(CurrentEdge);
+		}
+		else
+		{
+			ProgressReader();
+			LoadCurrentDialogLine();
+		}
 		bNeedShowChoice = false;
 	}
 	else

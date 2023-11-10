@@ -26,6 +26,9 @@ public:
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType,
 	                           FActorComponentTickFunction* ThisTickFunction) override;
 
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Dialog")
+	bool PrintChoiceAsLine;
+	
 	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
 	void OnFinishedReading();
 	
@@ -65,7 +68,7 @@ public:
 		return DialogTree.Message.IsEmpty();
 	}
 
-	UPROPERTY(BlueprintReadOnly)
+	UPROPERTY(BlueprintReadOnly, Category = "Dialog")
 	TMap<FString, bool> SavedVariables;
 
 	UFUNCTION(BlueprintCallable)

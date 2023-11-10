@@ -207,3 +207,140 @@ FDialogTree UMLMReader::DEBUG_TestLinearDialog(const FString& FileName)
 
 	return DialogTree;
 }
+
+TArray<FDialogEvent> UMLMReader::ParseEventsFromLine(FString Line)
+{
+	TArray<FDialogEvent> Events;
+	int32 Index = 0;
+	
+	const FString EVENTBRACKET_OPEN = TEXT("[");
+	const FString EVENTBRACKET_CLOSE = TEXT("]");
+
+	while (Index < Line.Len())
+	{
+		UE_LOG(LogTemp, Warning, TEXT("while loop: index = %i"), Index)
+		int32 OpenIndex = Line.Find(EVENTBRACKET_OPEN, ESearchCase::IgnoreCase, ESearchDir::FromStart, Index);
+		int32 CloseIndex = Line.Find(EVENTBRACKET_CLOSE, ESearchCase::IgnoreCase, ESearchDir::FromStart, Index);
+		bool HasOpen = OpenIndex > -1;
+		bool HasClosed = CloseIndex > -1;
+		
+		if (HasOpen != HasClosed || CloseIndex < OpenIndex)
+		{
+			UE_LOG(LogTemp, Warning, TEXT("Missing bracket: unpaired bracket at index %i"), HasOpen ? OpenIndex : CloseIndex);
+			FDialogEvent NewEvent;
+			NewEvent.EventType = EDialogEventType::Line;
+			NewEvent.Argument = Line.Mid(Index);
+			Events.Add(NewEvent);
+			return Events;
+		}
+
+		if (HasOpen)
+		{
+			if (Index != OpenIndex)
+			{
+				UE_LOG(LogTemp, Warning, TEXT("Adding Line first..."))
+				
+				FDialogEvent NewEvent;
+				NewEvent.EventType = EDialogEventType::Line;
+				NewEvent.Argument = Line.Mid(Index, OpenIndex - Index);
+				if (!NewEvent.Argument.TrimStartAndEnd().IsEmpty())
+				{
+					Events.Add(NewEvent);
+				}
+			}
+
+			EDialogEventType Type;
+			FString Argument;
+			FString EventText = Line.Mid(OpenIndex + 1, CloseIndex - OpenIndex - 1);
+
+			if (ParseEventText(EventText, Argument, Type))
+			{
+				UE_LOG(LogTemp, Warning, TEXT("parsed event: %i - %s"), Type, *Argument)
+				FDialogEvent NewEvent;
+				NewEvent.EventType = Type;
+				NewEvent.Argument = Argument;
+				Events.Add(NewEvent);
+
+				Index = CloseIndex + 1;
+			}
+			else
+			{
+				UE_LOG(LogTemp, Warning, TEXT("parse event failed:  returning whole line"))
+				FDialogEvent NewEvent;
+				NewEvent.EventType = Type;
+				NewEvent.Argument = Line.Mid(OpenIndex);
+				Events.Add(NewEvent);
+
+				return Events;
+			}
+		}
+		else
+		{
+			UE_LOG(LogTemp, Warning, TEXT("No more events -- returning everything as line"))
+			FDialogEvent NewEvent;
+			NewEvent.EventType = EDialogEventType::Line;
+			NewEvent.Argument = Line.Mid(Index);
+			Events.Add(NewEvent);
+
+			Index = Line.Len();
+		}
+	}
+
+	UE_LOG(LogTemp, Warning, TEXT("Parsed line count = %i"), Events.Num());
+	return Events;
+}
+
+bool UMLMReader::ParseEventText(const FString& BracketedValue, FString& Value, EDialogEventType& EventType)
+{
+	FString TrimmedValue = BracketedValue.TrimStartAndEnd();
+
+	const FString EVENTKEY_PAUSE = TEXT("PAUSE");
+	const FString EVENTKEY_PLAYRATE = TEXT("SPEED");
+	
+	if (TrimmedValue.StartsWith(EVENTKEY_PAUSE, ESearchCase::IgnoreCase))
+	{
+		FString SplitValue = TrimmedValue.Mid(EVENTKEY_PAUSE.Len());
+		
+		if (!FMath::IsNearlyZero(FCString::Atof(*SplitValue), 0.01f))
+		{
+			Value = SplitValue;
+			EventType = EDialogEventType::Pause;
+			return true;
+		}
+		
+		UE_LOG(LogTemp, Warning, TEXT("Invalid value for type '%s': '%s'"), *EVENTKEY_PLAYRATE, *SplitValue)
+	}
+	else if (TrimmedValue.StartsWith(EVENTKEY_PLAYRATE, ESearchCase::IgnoreCase))
+	{
+		FString SplitValue = TrimmedValue.Mid(EVENTKEY_PLAYRATE.Len());
+		
+		if (!FMath::IsNearlyZero(FCString::Atof(*SplitValue), 0.01f))
+		{
+			Value = SplitValue;
+			EventType = EDialogEventType::PlaybackSpeed;
+			return true;
+		}
+
+		UE_LOG(LogTemp, Warning, TEXT("Invalid value for type '%s': '%s'"), *EVENTKEY_PLAYRATE, *SplitValue)
+	}
+	else
+	{
+		for (int32 i = EDialogEmotion::None; i < EDialogEmotion::Max; ++i)
+		{
+			EDialogEmotion Num = (EDialogEmotion) i;
+			FText EnumValue;
+			UEnum::GetDisplayValueAsText(Num, EnumValue);
+			FString MatchStr = EnumValue.ToString();
+			UE_LOG(LogTemp, Warning, TEXT("%s"), *MatchStr);
+			if (0 == TrimmedValue.Compare(MatchStr, ESearchCase::IgnoreCase))
+			{
+				Value = FString::FromInt(i);
+				EventType = EDialogEventType::Emotion;
+				return true;
+			}
+		}
+		UE_LOG(LogTemp, Warning, TEXT("No matching event prefix and text did not match emotion: (%s)"), *BracketedValue);
+	}
+
+	return false;
+}
