@@ -1,0 +1,25 @@
+
+#label Begin
+DURT: Want... [pause .5] to talk to D'Urt? [pause .5] No one wants to talk to D'Urt. [pause .5] And no bosses want to hire D'Urt...
+  #choose Uuuuhhh - what is that smell?
+    #goto MadeFirstChoice
+    DURT: *Sn[pause .2]i[pause .2]ff*[pause 1] D'Urt doesn't smell anything.
+
+  #choose Uuuuhhhh- Of Course!
+    #goto MadeFirstChoice
+    DURT: D'Urt is so happy! [pause .2]No one wants to speak to D'Urt!
+
+
+#label MadeFirstChoice
+DURT: D'Urt is so happy! [pause .2]Usually people just trip over D'Urt. [pause .2]Or throw things at D'Urt. [pause .2]Or trip over and THEN throw things at D'Urt. [pause .2]D'Urt wishes he had friends who could help him spend this large bag of gold pieces. [pause .2]But people don't want to stay around D'Urt...	
+  #choose Gold Pieces, you say? I could be your friend, D'Urt!
+    #goto MadeSecondChoice
+    DURT: D'Urt loves his new friend! 
+
+  #choose There aren't enough Gold Pieces in the world to make me stick around
+    #goto MadeSecondChoice
+    DURT: D'Urt doesn't understand why this keeps happening... 
+
+
+#label MadeSecondChoice
+  #set DURT_INTRODUCED

@@ -1,0 +1,45 @@
+
+#label Begin
+DURT: You are back! Talking to D'Urt! Voluntarily!	
+  #choose Uh... okay. Do you... do you want to spend some money? Wait, I mean --!
+    #goto Rejected
+    DURT: D'Urt isn't sure he likes where this is going.
+
+  #choose Sure am, friend. Say, have you ever considered putting your money to work for you?
+    #goto PassedFirst
+    DURT: D'Urt doesn't understand what you mean, but D'Urt would love to learn more, friend!
+
+
+#label PassedFirst
+DURT: How does money work for me? *Gasp* Does D'Urt have...magic money?	
+  #choose Well, money is very transformative, so in a way, I suppose it IS a type of magic. Magic Money, hey, that would make a good company name... 
+    #goto Rejected
+    DURT: D'Urt is confused, and also bored
+
+  #choose Close, D'Urt! But with your gold and my AMAZING product "Defensive Talisman," you can help protect people AND be your own boss!
+    #goto PassedSecond
+    DURT: D'Urt...can be his OWN boss?!
+
+
+
+#label PassedSecond
+DURT: But D'Urt doesn't understand how he can be his own boss?
+  #choose Well you see, if you sell items you buy from me, you can make money!
+    #goto Rejected
+    DURT: So... you would be D'Urt's boss. That doesn't sound right.
+
+  #choose It's easy! People will be practically throwing gold at you!
+    #goto Rejected
+    DURT: People throw things at D'Urt already. D'Urt doesn't like it. D'Urt is a good *mumblemumble*! 
+
+  #choose Don't you trust your friend, D'Urt?
+    #goto Recruited
+    DURT: ...D'Urt DOES trust his friend! Alright, D'Urt will do it! 
+
+
+#label Recruited
+#set DURT_RECRUITED
+
+
+#label Rejected
+#set DURT_REJECTED
