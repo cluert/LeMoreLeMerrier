@@ -1,0 +1,45 @@
+
+#label Begin
+B3TE: I see you have returned. Would you like to speak of <LOCAL SPORTS TEAM> next?	
+  #choose Actually, I wanted to see if you had seen anyone selling "Healing Oil" here. People here would love an incredible product like that!
+    #goto PassedFirst
+    B3TE: What is "Healing Oil?" I use a proprietary blend of mimic slime and dragon oil myself. I am very knowledgeable about oils for automata.
+
+  #choose Actually, yeah! Did you see the Knights last night? It was a slaughter!
+    #goto Rejected
+    B3TE: It was indeed a slaughter. It took me a long period of time to clear the internal fluids from my joints. It was... unpleasant.
+
+
+#label PassedFirst
+B3TE: My database contains 29 ways to zest a lime, but no information is provided on "Healing Oils." Please elucidate.	
+  #choose There is no way there are 29 separate ways to zest a lime.
+    #goto Rejected
+    B3TE: You are in error.
+
+  #choose You are too modest. Of course you would know that "Healing Oils" are scientifically proven, data-driven salves to improve biological people.
+    #goto PassedSecond
+    B3TE: Ahh, yes. I, as you said, know about science and data. I was testing you.
+
+
+
+#label PassedSecond
+B3TE: These "Healing Oils" sound fascinating, and certainly it is logical for the townspeople to wish to purchase them. But why are you telling me?	
+  #choose A Girl Boss like you? Naturally you would know how to sell these!
+    #goto Rejected
+    B3TE: I am designated --UNIT: B3T-E--. Not "Girl Boss."
+
+  #choose Only those with the logic and intelligence to create a small business can succeed in selling these!
+    #goto Recruited
+    B3TE: You have made a reasonable assertion. I am both logical and intelligent, so by extension, selling these "Healing Oils" would also be logical and intelligent.
+  
+  #choose You have such a... breadth of knowledge, of course you'd make a killing!
+    #goto Rejected
+    B3TE: Internal fluids are distasteful, so I do not wish for any killing.
+
+
+#label Recruited
+#set B3TE_RECRUITED
+
+
+#label Rejected
+#set B3TE_REJECTED

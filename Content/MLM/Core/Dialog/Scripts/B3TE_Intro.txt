@@ -1,0 +1,25 @@
+
+#label Begin
+B3TE: Thank you for offering to converse with me. I do not have much experience speaking with biologicals, but I will use my complete lexicon of "small talks" to its fullest. Tell me, is it not very --WEATHER-- today?	
+  #choose Are you sure you're using the right lexicon?
+    #goto MadeFirstChoice
+    B3TE: Thank you for your input. Please stand by while I run a diagnostic.
+
+  #choose ...Yes, it is very... weather today.
+    #goto MadeFirstChoice
+    B3TE: Thank you for your input. We may now commence with dialogue.
+
+
+#label MadeFirstChoice
+B3TE: Are you in need of my services? I am able to provide information on thaumaturgy, engineering, and 587 island cocktail recipes.	
+  #choose That sounds fascinating, but I was actually hoping to be of service to YOU.
+    #goto MadeSecondChoice
+    B3TE: Thank you for your interest in assisting --UNIT: B3T-E--. Please wait while I make a list of --UNIT: B3T-E--'s requirements.
+
+  #choose Have you ever considered being financially free?
+    #goto MadeSecondChoice
+    B3TE: I do not understand your query. Am I financially bound? I am an automata, I am very strong.
+
+
+#label MadeSecondChoice
+  #set B3TE_INTRODUCED

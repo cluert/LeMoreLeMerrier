@@ -1,0 +1,25 @@
+
+#label Begin
+WINDA: I'll be right with you! Just need to get this stubborn... sigil... there! So sorry, what can I help you with?	
+  #choose What a lovely shop! Is it yours?
+    #goto MadeFirstChoice
+    WINDA: *Sigh* I wish. I'm just working here for now until I can get finish my MD - my Magic Degree.
+
+  #choose What is that burning smell?
+    #goto MadeFirstChoice
+    WINDA: My muffins! I'll be right back!
+
+
+#label MadeFirstChoice
+WINDA: Anyways, is there anything I can help you find? We have some lovely new runes in, and potion ingredients are on sale. Frog spawn is half off!	
+  #choose Thank you, but I was just thinking how wasted you are here...
+    #goto MadeSecondChoice
+    WINDA: That's sweet of you to say... and perceptive. Say, what did you say your name was again?
+
+  #choose Ooh, do you have any Crystal Balls in? I haven't the foggiest where I put mine. 
+    #goto MadeSecondChoice
+    WINDA: Puns are beneath us both.
+
+
+#label MadeSecondChoice
+  #set WINDA_INTRODUCED

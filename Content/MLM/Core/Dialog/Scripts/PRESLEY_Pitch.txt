@@ -1,0 +1,45 @@
+
+#label Begin
+PRESLEY: Back again for that drink? Say, I forgot my coin purse at home. I'll get the next round, cross my heart!	
+  #choose Actually, I was wondering if you'd ever given a thought to sales - from what I can see, you're a natural!
+    #goto PassedFirst
+    PRESLEY: I have always considered myself a man of many talents.
+
+  #choose What a coincidence! I left *my* gold at home too!
+    #goto Rejected
+    PRESLEY: What a waste of time--- I mean, maybe next time, friendly!
+
+
+#label PassedFirst
+PRESLEY: I can see you're getting at something. Hurry up then, there's a couple of friendly and... ever so charming young ladies over there I'm meeting.	
+  #choose And that's why "Beauty Charms" are the perfect product for you to get in on. You already have a dedicated client base!
+    #goto PassedSecond
+    PRESLEY: "Beauty charms," huh? That does sound like something they'd believe.
+
+  #choose You should buy "Beauty Charms." They definitely need them around here.protect people AND be your own boss!
+    #goto Rejected
+    PRESLEY: I've never needed helping charming a beauty, pal.
+
+
+
+#label PassedSecond
+PRESLEY: What makes these "Beauty Charms" something someone like me would be interested in?	
+  #choose Someone with your entrepreneurial mindset? You can't fail to make a profit. I'm talking 6 figures type of profit, at least!
+    #goto Recruited
+    PRESLEY: Alright, fine! There's one born every minute, and I know just how to spin this so I can make this work for me, too! 
+
+  #choose Something like these "Beauty Charms" don't come around every day! You'd be a fool not to invest.
+    #goto Rejected
+    PRESLEY: And yet, the only fool I see here is you.
+
+  #choose Someplace like this? Gullible women and merchants would be eating out of your hand to get a hold of these "Beauty Charms."
+    #goto Rejected
+    PRESLEY: How... unsanitary.
+
+
+#label Recruited
+#set PRESLEY_RECRUITED
+
+
+#label Rejected
+#set PRESLEY_REJECTED

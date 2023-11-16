@@ -1,0 +1,45 @@
+
+#label Begin
+WINDA: I would so love to own my own shop, but the overhead is simply outrageous. And on top of that, I'm in graduate school!	
+  #choose You really are an example of how the high-achieving modern sorceress can "have it all," aren't you?
+    #goto PassedFirst
+    WINDA: High-achieving? Oh, I don't know if I would go THAT far. Really, I'm barely out of Pigfarts.
+
+  #choose Sounds exhausting. Wouldn't you rather quit and work for me?
+    #goto Rejected
+    WINDA: As, what, exactly? I don't have time to interview, but thanks anyways!
+
+
+#label PassedFirst
+WINDA: Do you really think I could own my own shop? I don't know... 	
+  #choose Well, you could own a physical shop and have all that expense... or you could work from your own home and make passive income! Have you heard of "Fairy Dust Supplements?"
+    #goto PassedSecond
+    WINDA: Work from home? What sort of passive income? If it wouldn't take too much time, I suppose...
+
+  #choose You never know what you can manifest into being! Just try these "Fairy Dust Supplements!"
+    #goto Rejected
+    WINDA: Oh, we aren't taught "Manifestations" until the second semester.
+
+
+
+#label PassedSecond
+WINDA: How exactly could working from home mean I become a success? And what are "Fairy Dust Supplements?"	
+  #choose "Fairy Dust Supplements" are the ultimate in abundance manifesting. Just think happy thoughts!
+    #goto Rejected
+    WINDA: But I work in retail. I don't HAVE happy thoughts!
+
+  #choose Selling "Fairy Dust Supplements" are the easiest way to build passive income on the side while working toward your future. Why, I could even see you featured in "Magic, Entertainment & Design" by this time next year!
+    #goto Recruited
+    WINDA: ... my own MED Talk? Really, do you think so? That would be amazing... 
+
+  #choose Look, "Fairy Dust Supplements" depend on belief. You have to just... believe me, okay?
+    #goto Rejected
+    WINDA: Um... I think it's time you see your way out.
+
+
+#label Recruited
+#set WINDA_RECRUITED
+
+
+#label Rejected
+#set WINDA_REJECTED

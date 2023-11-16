@@ -1,0 +1,25 @@
+
+#label Begin
+PRESLEY: Hello, friend! How are you this fine eve? Say, let me buy you a drink. Do you play cards?	
+  #choose That is... certainly a way to introduce yourself.
+    #goto MadeFirstChoice
+    PRESLEY: What can I say? I'm a friendly sort of guy.
+
+  #choose Why yes, I *do* like cards! And dice. Do you have dice?
+    #goto MadeFirstChoice
+    PRESLEY: Oh, my friend. 
+
+
+#label MadeFirstChoice
+PRESLEY: While I have you here, I have heard of this fantastic business opportunity. Really, I wish I could take advantage of it myself, but alas. What do you say?	
+  #choose Funnily enough, I was just about to offer you an opportunity too! Want to start making some... real money?
+    #goto MadeSecondChoice
+    PRESLEY: ...I know I've heard that sort of talk before... and yet, I am intrigued.
+
+  #choose This feels familiar. 
+    #goto MadeSecondChoice
+    PRESLEY: Why, we're reading each other's minds already! Now, how much money did you say you had?
+
+
+#label MadeSecondChoice
+  #set PRESLEY_INTRODUCED
