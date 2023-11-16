@@ -218,7 +218,7 @@ TArray<FDialogEvent> UMLMReader::ParseEventsFromLine(FString Line)
 
 	while (Index < Line.Len())
 	{
-		UE_LOG(LogTemp, Warning, TEXT("while loop: index = %i"), Index)
+		// UE_LOG(LogTemp, Warning, TEXT("while loop: index = %i"), Index)
 		int32 OpenIndex = Line.Find(EVENTBRACKET_OPEN, ESearchCase::IgnoreCase, ESearchDir::FromStart, Index);
 		int32 CloseIndex = Line.Find(EVENTBRACKET_CLOSE, ESearchCase::IgnoreCase, ESearchDir::FromStart, Index);
 		bool HasOpen = OpenIndex > -1;
@@ -238,7 +238,7 @@ TArray<FDialogEvent> UMLMReader::ParseEventsFromLine(FString Line)
 		{
 			if (Index != OpenIndex)
 			{
-				UE_LOG(LogTemp, Warning, TEXT("Adding Line first..."))
+				// UE_LOG(LogTemp, Warning, TEXT("Adding Line first..."))
 				
 				FDialogEvent NewEvent;
 				NewEvent.EventType = EDialogEventType::Line;
@@ -255,7 +255,7 @@ TArray<FDialogEvent> UMLMReader::ParseEventsFromLine(FString Line)
 
 			if (ParseEventText(EventText, Argument, Type))
 			{
-				UE_LOG(LogTemp, Warning, TEXT("parsed event: %i - %s"), Type, *Argument)
+				// UE_LOG(LogTemp, Warning, TEXT("parsed event: %i - %s"), Type, *Argument)
 				FDialogEvent NewEvent;
 				NewEvent.EventType = Type;
 				NewEvent.Argument = Argument;
@@ -276,7 +276,7 @@ TArray<FDialogEvent> UMLMReader::ParseEventsFromLine(FString Line)
 		}
 		else
 		{
-			UE_LOG(LogTemp, Warning, TEXT("No more events -- returning everything as line"))
+			// UE_LOG(LogTemp, Warning, TEXT("No more events -- returning everything as line"))
 			FDialogEvent NewEvent;
 			NewEvent.EventType = EDialogEventType::Line;
 			NewEvent.Argument = Line.Mid(Index);
@@ -286,7 +286,7 @@ TArray<FDialogEvent> UMLMReader::ParseEventsFromLine(FString Line)
 		}
 	}
 
-	UE_LOG(LogTemp, Warning, TEXT("Parsed line count = %i"), Events.Num());
+	// UE_LOG(LogTemp, Warning, TEXT("Parsed line count = %i"), Events.Num());
 	return Events;
 }
 
