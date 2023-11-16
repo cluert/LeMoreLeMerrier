@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
+
 #include "ProductComponent.generated.h"
 
 
@@ -26,4 +27,17 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	int Value = 1;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	bool bInInventory = false;
+
+	void AddedToInventory();
+
+	void RemovedFromInventory();
+
+	UFUNCTION(BlueprintImplementableEvent)
+	void OnAddedToInventory();
+
+	UFUNCTION(BlueprintImplementableEvent)
+	void OnRemovedFromInventory();
 };
