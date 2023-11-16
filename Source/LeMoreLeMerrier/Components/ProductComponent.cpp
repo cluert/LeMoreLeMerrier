@@ -32,3 +32,15 @@ void UProductComponent::TickComponent(float DeltaTime, ELevelTick TickType, FAct
 	// ...
 }
 
+void UProductComponent::AddedToInventory()
+{
+	bInInventory = true;
+	OnAddedToInventory();
+}
+
+void UProductComponent::RemovedFromInventory()
+{
+	bInInventory = false;
+	OnRemovedFromInventory();
+}
+
