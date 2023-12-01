@@ -6,6 +6,7 @@
 UMLMUserSettings::UMLMUserSettings()
 {
 	UMLMUserSettings::Instance = this;
+	LoadConfig();
 }
 
 UMLMUserSettings* UMLMUserSettings::GetMLMUserSettings()
@@ -25,4 +26,9 @@ float UMLMUserSettings::GetMusicVolume()
 float UMLMUserSettings::GetSFXVolume()
 {
 	return Instance->VolumeMaster * Instance->VolumeSFX;
+}
+
+void UMLMUserSettings::SaveCustomSettings()
+{
+	SaveConfig();
 }

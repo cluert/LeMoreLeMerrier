@@ -7,7 +7,7 @@
 #include "GenericPlatform/GenericWindow.h"
 #include "MLMUserSettings.generated.h"
 
-UCLASS(BlueprintType)
+UCLASS(config=GameUserSettings, BlueprintType)
 class LEMORELEMERRIER_API UMLMUserSettings : public UGameUserSettings
 {
 	GENERATED_BODY()
@@ -25,6 +25,9 @@ public:
 	UFUNCTION(BlueprintPure, BlueprintCallable, meta = (CompactNodeTitle = "SFX Volume"))
 	static float GetSFXVolume();
 
+	UFUNCTION(BlueprintCallable)
+	void SaveCustomSettings();
+
 	// User settings:
 	UPROPERTY(Config, BlueprintReadWrite)
 	FText PlayerName;
@@ -37,4 +40,7 @@ public:
 
 	UPROPERTY(Config, BlueprintReadWrite)
 	float VolumeSFX = 1.0f;
+
+	UPROPERTY(Config, BlueprintReadWrite)
+	bool bInvertScrollDirection = false;
 };
